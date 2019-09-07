@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvasToThumbnail</title>
+</head>
+
+<body>
+    <input type="file" name="file" id="file">
+    <canvas id="canvas" hidden></canvas>
+    <script>
+        const files = document.getElementById('file');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let base64URL;
+
+        files.onchange = function () {
+            const file = this.files[0];
+            const { type, name } = file;
+            const fr = new FileReader();
+
+            fr.onload = function () {
+                base64URL = this.result;
+                const imgObj = new Image();
+                imgObj.src = base64URL;
+                document.body.appendChild(imgObj);
+                imgObj.onload = function () {
+                    const scale = imgObj.width / imgObj.height;
+                    canvas.width = 300 * scale;
+                    canvas.height = 300;
+                    ctx.drawImage(imgObj, 0, 0, 300 * scale, 300);
+                    const newBase64URL = canvas.toDataURL(type, '.5');
+                    const a = document.createElement('a');
+                    a.href = newBase64URL;
+                    a.download = name
+                    document.body.appendChild(a);
+                    a.click();
+                }
+            };
+
+            fr.readAsDataURL(file);
+        }
+    </script>
+</body>
+
+</html>

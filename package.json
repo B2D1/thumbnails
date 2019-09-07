@@ -1,0 +1,19 @@
+{
+  "name": "tub",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "gm": "^1.23.1",
+    "image-size": "^0.7.4",
+    "koa": "^2.8.1",
+    "koa-cors": "^0.0.16",
+    "resize-img": "^1.1.2"
+  }
+}

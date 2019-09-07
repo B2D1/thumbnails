@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>blurToThumbnail</title>
+</head>
+<style>
+    .blur-img-container {
+        position: relative;
+        background: #eeeeee;
+        background-size: cover;
+        overflow: hidden;
+    }
+
+    .blur-img-container img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        transition: all 0.4s ease-in-out;
+    }
+
+    .blur-img-container .thumb-loaded {
+        opacity: 1;
+        filter: blur(20px);
+        transform: scale(1);
+    }
+
+    .blur-img-container .large-loaded {
+        opacity: 1;
+    }
+
+    .blur-img-container .thumb-hidden {
+        opacity: 0;
+    }
+</style>
+
+<body>
+    <header>
+        Preload Images With Blur Effect
+    </header>
+    <hr>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
+    </p>
+    <figure name="blur" class="blur-img-container" data-width="1500" data-height="750" data-thumb='./thumbnails/1.jpeg'
+        data-src='./assets/1.jpeg'>
+    </figure>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
+    </p>
+    <figure name="blur" class="blur-img-container" data-width="3840" data-height="1568" data-thumb="./thumbnails/2.png"
+        data-src='./assets/2.png'>
+    </figure>
+    <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
+        magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+        laborum.
+    </p>
+    <!-- <script src="./blur-image.js"></script> -->
+    <script>
+        const containers = [...document.getElementsByName('blur')];
+        const setStyle = (elem, className) => {
+            if (elem.classList) {
+                elem.classList.add(className);
+            } else {
+                elem.className += ` ${className}`;
+            }
+        };
+        containers.forEach(elem => {
+            const realHeight = elem.dataset.height;
+            const realWidth = elem.dataset.width;
+            const thumbSrc = elem.dataset.thumb;
+            const realSrc = elem.dataset.src;
+
+            elem.style.paddingBottom = `${(realHeight / realWidth) * 100}%`;
+            const thumbImg = new Image();
+            thumbImg.src = thumbSrc;
+            thumbImg.onload = () => {
+                setStyle(thumbImg, 'thumb-loaded');
+            };
+            elem.appendChild(thumbImg);
+
+            const realImg = new Image();
+            realImg.src = realSrc;
+            realImg.onload = () => {
+                setStyle(realImg, 'large-loaded');
+                setStyle(thumbImg, 'thumb-hidden');
+            };
+            elem.appendChild(realImg);
+        });
+
+    </script>
+</body>
+
+</html>

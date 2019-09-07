@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>nodeToThumbnail</title>
+</head>
+<style>
+    img {
+        display: inline-block;
+        width: 300px;
+    }
+
+    img::before {
+        content: '';
+        padding-top: 100%;
+        float: left;
+    }
+
+    img::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+</style>
+
+<body>
+    <img src="" alt="" data-name='scene_1.png' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_3.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_3.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_4.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_4.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_4.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_4.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_4.jpg' data-thumbnail>
+    <h1>你好</h1>
+    <img src="" alt="" data-name='scene_4.jpg' data-thumbnail>
+    <img src="http://localhost:3000/assets/scene_1.png" alt="" data-name='scene_1.png'>
+    <img src="http://localhost:3000/assets/scene_2.jpg" alt="" data-name='scene_2.jpg'>
+    <img src="http://localhost:3000/assets/scene_3.jpg" alt="" data-name='scene_3.jpg'>
+    <img src="http://localhost:3000/assets/scene_4.jpg" alt="" data-name='scene_4.jpg'>
+    <script>
+        function loadThumbnails(width) {
+            const thumbnails = [...document.querySelectorAll('img[data-thumbnail]')];
+
+            const requestArr = thumbnails.map((img) => {
+                const imgName = img.dataset.name;
+                return fetch(`http://localhost:3000/generateThumbnail?imgName=${imgName}&width=${width}`, {
+                    method: 'GET',
+                })
+                    .then(stream => stream.text()).then(res => {
+                        const { base64URL, type } = JSON.parse(res);
+                        img.src = `data:image/${type};base64,${base64URL}`;
+                    })
+            })
+
+            Promise.all(requestArr)
+                .then(resArr => {
+                    console.log('缩略图全部加载完毕');
+                })
+        }
+        loadThumbnails(300);
+
+    </script>
+</body>
+
+</html>
